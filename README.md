@@ -19,4 +19,6 @@ Edits for previously tasks and tasks for day 17-18
 - Add Ninject
 - Add mappers
 - Add Mock
+### ExtTraining.Summer.2018.1 
+- Add old version
 ## [Tasks](https://github.com/AnzhelikaKravchuk/Training-Summer-Express-2018/tree/master/Days%2017-18)
