@@ -263,3 +263,4 @@ __pycache__/
 *.csproj
 AssemblyInfo.cs
 *.config
+*.StyleCop
