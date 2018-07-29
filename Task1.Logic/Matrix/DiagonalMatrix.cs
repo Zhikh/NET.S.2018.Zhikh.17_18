@@ -13,7 +13,7 @@ namespace Task1.Logic
         {
             get
             {
-                return _container[indexRow, indexColumn];
+                return base.Data[indexRow, indexColumn];
             }
 
             set
@@ -25,7 +25,7 @@ namespace Task1.Logic
 
                 if (indexRow == indexColumn)
                 {
-                    _container[indexColumn, indexRow] = value;
+                    base.Data[indexColumn, indexRow] = value;
                 }
             }
         }

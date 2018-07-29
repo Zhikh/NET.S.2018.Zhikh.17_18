@@ -1,26 +1,27 @@
-﻿namespace Task1.Logic
+﻿using System.Collections.Generic;
+
+namespace Task1.Logic
 {
     public sealed class SymmetricMatrix<T> : BaseSquareMatrix<T>
     {
-        public SymmetricMatrix(int order) : base(order)
+        public SymmetricMatrix(int order, IComparer<T> comparer = null) : base(order, comparer)
         {
-           
         }
 
         public override T this[int indexRow, int indexColumn]
         {
             get
             {
-                return _container[indexRow, indexColumn];
+                return base.Data[indexRow, indexColumn];
             }
 
             set
             {
-                _container[indexRow, indexColumn] = value;
+                base.Data[indexRow, indexColumn] = value;
 
                 if (indexRow != indexColumn)
                 {
-                    _container[indexColumn, indexRow] = value;
+                    base.Data[indexColumn, indexRow] = value;
                 }
             }
         }

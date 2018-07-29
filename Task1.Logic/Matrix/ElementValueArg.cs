@@ -6,10 +6,12 @@ namespace Task1.Logic
     {
         public ElementValueArg(T oldElement, T newElement)
         {
-
+            this.OldValue = oldElement;
+            this.NewValue = newElement;
         }
         
         public T OldValue { get; }
+
         public T NewValue { get; }
     }
 }

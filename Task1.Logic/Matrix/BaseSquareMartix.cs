@@ -5,10 +5,6 @@ namespace Task1.Logic
 {
     public abstract class BaseSquareMatrix<T>
     {
-        protected T[,] _container;
-        protected IComparer<T> _comparer;
-        public event EventHandler<ElementValueArg<T>> ElementValueChanged = delegate { };
-        
         public BaseSquareMatrix(int order, IComparer<T> comparer = null)
         {
             if (order <= 0)
@@ -16,26 +12,32 @@ namespace Task1.Logic
                 throw new ArgumentException($"The {nameof(order)} can't be less than 0 or be 0!");
             }
 
-            _comparer = comparer ??
+            Comparer = comparer ??
                 (Comparer<T>.Default as IComparer<T> ??
                 throw new ArgumentNullException("Comparer's indefined for type of T!"));
 
-            _container = new T[order, order];
+            Data = new T[order, order];
             Order = order;
         }
 
+        public event EventHandler<ElementValueArg<T>> ElementValueChanged = delegate { };
+
         public int Order { get; }
+
+        protected T[,] Data { get; set; }
+
+        protected IComparer<T> Comparer { get; set; }
 
         public virtual T this[int indexRow, int indexColumn]
         {
             get
             {
-                return _container[indexRow, indexColumn];
+                return Data[indexRow, indexColumn];
             }
 
             set
             {
-                _container[indexRow, indexColumn] = value;
+                Data[indexRow, indexColumn] = value;
             }
         }
 
@@ -56,7 +58,7 @@ namespace Task1.Logic
             {
                 for (int j = 0; j < Order; j++)
                 {
-                    if (_comparer.Compare(this[i, j], this[j, i]) != 0)
+                    if (Comparer.Compare(this[i, j], this[j, i]) != 0)
                     {
                         return false;
                     }
@@ -72,7 +74,7 @@ namespace Task1.Logic
 
             for (int i = 0; i < Order; i++)
             {
-                result += (dynamic)_container[i, i];
+                result += (dynamic)Data[i, i];
             }
 
             return result;
@@ -80,12 +82,12 @@ namespace Task1.Logic
 
         public T Determinant()
         {
-            if (_container.Length == 4)
+            if (Data.Length == 4)
             {
-                return (dynamic)this[0, 0] * this[1, 1] - (dynamic)this[0, 1] * this[1, 0];
+                return ((dynamic)this[0, 0] * this[1, 1]) - ((dynamic)this[0, 1] * this[1, 0]);
             }
 
-            return FindDaterminant((dynamic)_container);
+            return FindDaterminant((dynamic)Data);
         }
 
         public bool Equals(BaseSquareMatrix<T> matrix)
@@ -99,7 +101,7 @@ namespace Task1.Logic
             {
                 for (int j = 0; j < Order; j++)
                 {
-                    if (_comparer.Compare(this[i, j], matrix[i, j]) != 0)
+                    if (Comparer.Compare(this[i, j], matrix[i, j]) != 0)
                     {
                         return false;
                     }
@@ -113,15 +115,15 @@ namespace Task1.Logic
         {
             var matrix = obj as BaseSquareMatrix<T>;
 
-            return Equals(matrix);
+            return this.Equals(matrix);
         }
 
         public override int GetHashCode()
         {
             var hashCode = 368104177;
-            hashCode = hashCode * -1521134295 + EqualityComparer<T[,]>.Default.GetHashCode(_container);
-            hashCode = hashCode * -1521134295 + EqualityComparer<IComparer<T>>.Default.GetHashCode(_comparer);
-            hashCode = hashCode * -1521134295 + Order.GetHashCode();
+            hashCode = (hashCode * -1521134295) + EqualityComparer<T[,]>.Default.GetHashCode(Data);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<IComparer<T>>.Default.GetHashCode(Comparer);
+            hashCode = (hashCode * -1521134295) + Order.GetHashCode();
             return hashCode;
         }
 
@@ -135,7 +137,7 @@ namespace Task1.Logic
             int sign = 1;
             dynamic result = default(T);
 
-            for (int i = 0; i < _container.GetLength(1); i++)
+            for (int i = 0; i < Data.GetLength(1); i++)
             {
                 dynamic[,] minor = null;
 
