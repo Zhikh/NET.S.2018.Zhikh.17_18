@@ -11,5 +11,10 @@ namespace Task1.Logic
         public SquareMatrix(int order, IComparer<T> comparer = null) : base(order, comparer)
         {
         }
+
+        public void Insert(T value, int rowIndex, int columnIndex)
+        {
+            this[rowIndex, columnIndex] = value;
+        }
     }
 }

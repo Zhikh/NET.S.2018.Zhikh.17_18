@@ -35,7 +35,7 @@ namespace Task1.Logic
                 return Data[indexRow, indexColumn];
             }
 
-            set
+            protected set
             {
                 Data[indexRow, indexColumn] = value;
             }

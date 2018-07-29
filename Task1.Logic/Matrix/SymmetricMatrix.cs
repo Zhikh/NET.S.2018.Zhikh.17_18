@@ -7,22 +7,14 @@ namespace Task1.Logic
         public SymmetricMatrix(int order, IComparer<T> comparer = null) : base(order, comparer)
         {
         }
-
-        public override T this[int indexRow, int indexColumn]
+        
+        public void Insert(T value, int rowIndex, int columnIndex)
         {
-            get
-            {
-                return base.Data[indexRow, indexColumn];
-            }
+            base.Data[rowIndex, columnIndex] = value;
 
-            set
+            if (rowIndex != columnIndex)
             {
-                base.Data[indexRow, indexColumn] = value;
-
-                if (indexRow != indexColumn)
-                {
-                    base.Data[indexColumn, indexRow] = value;
-                }
+                base.Data[columnIndex, columnIndex] = value;
             }
         }
     }
