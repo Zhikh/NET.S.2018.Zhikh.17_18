@@ -14,7 +14,7 @@ namespace Task1.Logic
 
             if (rowIndex != columnIndex)
             {
-                base.Data[columnIndex, columnIndex] = value;
+                base.Data[columnIndex, rowIndex] = value;
             }
         }
     }

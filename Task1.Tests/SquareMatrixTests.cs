@@ -19,6 +19,8 @@ namespace Task1.Tests
 
         #region Add value to matrix
         [TestCase(2, new int[] { 1, 2, 3, 4})]
+        [TestCase(2, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15})]
+        [TestCase(2, new int[] { 1, 0, 3, -120, 5, 6, 100, 8, 9, 10, int.MaxValue, 12, 13, int.MinValue, 15})]
         public void Indexator_SequenceOfElements_CorrectResult(int order, int[] values)
         {
             var matrix = new SquareMatrix<int>(order);
@@ -40,7 +42,7 @@ namespace Task1.Tests
             {
                 for (int j = 0; j < order; j++)
                 {
-                    matrix[i, j] = values[k++];
+                    matrix.Insert(values[k++], i, j);
                 }
             }
         }

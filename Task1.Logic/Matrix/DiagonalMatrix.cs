@@ -11,6 +11,11 @@ namespace Task1.Logic
         
         public void Insert(T value, int index)
         {
+            if (Comparer.Compare(value, default(T)) == 0)
+            {
+                throw new ArgumentException($"The {nameof(value)} can't be null!");
+            }
+
             base.Data[index, index] = value;
         }
     }
