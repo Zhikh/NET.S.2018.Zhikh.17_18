@@ -88,6 +88,48 @@ namespace Task1.Logic
             return FindDaterminant((dynamic)_container);
         }
 
+        public bool Equals(BaseSquareMatrix<T> matrix)
+        {
+            if (Order != matrix.Order)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Order; i++)
+            {
+                for (int j = 0; j < Order; j++)
+                {
+                    if (_comparer.Compare(this[i, j], matrix[i, j]) != 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var matrix = obj as BaseSquareMatrix<T>;
+
+            return Equals(matrix);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 368104177;
+            hashCode = hashCode * -1521134295 + EqualityComparer<T[,]>.Default.GetHashCode(_container);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IComparer<T>>.Default.GetHashCode(_comparer);
+            hashCode = hashCode * -1521134295 + Order.GetHashCode();
+            return hashCode;
+        }
+
+        protected virtual void OnElementValueChange(object sender, ElementValueArg<T> eventArgs)
+        {
+            ElementValueChanged?.Invoke(this, eventArgs);
+        }
+
         private dynamic FindDaterminant(dynamic[,] matrix)
         {
             int sign = 1;
@@ -106,7 +148,7 @@ namespace Task1.Logic
 
         private void GetMinor(T[,] minor, int n)
         {
-            minor = new T[Order,Order];
+            minor = new T[Order, Order];
 
             for (int i = 1; i < Order; i++)
             {
@@ -120,11 +162,6 @@ namespace Task1.Logic
                     minor[i - 1, j - 1] = this[i, j];
                 }
             }
-        }
-
-        protected virtual void OnElementValueChange(object sender, ElementValueArg<T> eventArgs)
-        {
-            ElementValueChanged?.Invoke(this, eventArgs);
         }
     }
 }
