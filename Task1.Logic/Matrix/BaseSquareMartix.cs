@@ -5,6 +5,14 @@ namespace Task1.Logic
 {
     public abstract class BaseSquareMatrix<T>
     {
+        #region public API
+        /// <summary>
+        /// Initialize properties
+        /// </summary>
+        /// <param name="order"> Order of matrix </param>
+        /// <param name="comparer"> Rules for comparing </param>
+        /// <exception cref="ArgumentException"> If order is invalid </exception>
+        /// <exception cref="ArgumentNullException"> If type T hasn't comparer </exception>
         public BaseSquareMatrix(int order, IComparer<T> comparer = null)
         {
             if (order <= 0)
@@ -20,16 +28,27 @@ namespace Task1.Logic
             Order = order;
         }
 
+        /// <summary>
+        /// Event of chamging values in matrix
+        /// </summary>
         public event EventHandler<ElementValueArg<T>> ElementValueChanged = delegate { };
 
+        /// <summary>
+        /// Order of matrix
+        /// </summary>
         public int Order { get; }
 
+        /// <summary>
+        /// Number of elements
+        /// </summary>
         public int Lenght => Data.Length;
 
-        protected T[,] Data { get; set; }
-
-        protected IComparer<T> Comparer { get; set; }
-
+        /// <summary>
+        /// Indexatot
+        /// </summary>
+        /// <param name="indexRow"> Index of row </param>
+        /// <param name="indexColumn"> Index of column </param>
+        /// <returns> Element by [indexRow, indexColumn] </returns>
         public virtual T this[int indexRow, int indexColumn]
         {
             get
@@ -39,37 +58,40 @@ namespace Task1.Logic
 
             protected set
             {
+                var elementArg = new ElementValueArg<T>(Data[indexRow, indexColumn], value);
+                OnElementValueChange(this, elementArg);
+
                 Data[indexRow, indexColumn] = value;
             }
         }
 
-        public void CopyTo(T[] array, int startRowIndex, int startColunmIndex, int count)
+        /// <summary>
+        /// Copy elements from matrix to sz-array
+        /// </summary>
+        /// <param name="array"> Array for copying </param>
+        /// <param name="startRowIndex"> Row index for start copying </param>
+        /// <param name="startColumnIndex"> Row Column for start copying </param>
+        /// <param name="count"> Number of elements </param>
+        /// <exception cref="ArgumentException"> If startRowIndex, startColumnIndex, count are out if range </exception>
+        ///<exception cref="ArgumentNullException"> If array is null </exception>
+        public void CopyTo(T[] array, int startRowIndex, int startColumnIndex, int count)
         {
-            if (startRowIndex < 0 || startRowIndex >= Order)
-            {
-                throw new ArgumentException($"The {nameof(startRowIndex)} can't be less than 0 or more than order!");
-            }
+            CheckOnValid(array, startRowIndex, startColumnIndex, count);
 
-            if (startColunmIndex < 0 || startColunmIndex >= Order)
-            {
-                throw new ArgumentException($"The {nameof(startColunmIndex)} can't be less than 0 or more than order!");
-            }
-
-            if (count <= 0 /*|| count > Data.Length - (startRowIndex + 1) * Order - startColunmIndex - 1*/)
-            {
-                throw new ArgumentException($"The {nameof(count)} is out of range!");
-            }
-            
             int writeValues = 0;
             for (int i = startRowIndex; writeValues != count && i < Order; i++)
             {
-                for (int j = startColunmIndex; writeValues != count && j < Order; j++)
+                for (int j = startColumnIndex; writeValues != count && j < Order; j++)
                 {
                     array[writeValues++] = this[i, j];
                 }
             }
         }
 
+        /// <summary>
+        /// Get object of IEnumerator for matrix
+        /// </summary>
+        /// <returns> IEnumerator </returns>
         public IEnumerator<T> GetEnumerator()
         {
             for (int i = 0; i < Order; i++)
@@ -81,6 +103,10 @@ namespace Task1.Logic
             }
         }
 
+        /// <summary>
+        /// Check matric on being symmetric
+        /// </summary>
+        /// <returns> If matrix is symmetric, true, else - false </returns>
         public bool IsSymmetric()
         {
             for (int i = 0; i < Order; i++)
@@ -97,6 +123,10 @@ namespace Task1.Logic
             return true;
         }
 
+        /// <summary>
+        /// Find sum of elements of main diagonal
+        /// </summary>
+        /// <returns> Trace </returns>
         public T Trace()
         {
             dynamic result = default(T);
@@ -109,6 +139,10 @@ namespace Task1.Logic
             return result;
         }
 
+        /// <summary>
+        /// Calculate determanant of matrix
+        /// </summary>
+        /// <returns> Determinant of matrix </returns>
         public T Determinant()
         {
             if (Data.Length == 4)
@@ -119,6 +153,11 @@ namespace Task1.Logic
             return FindDaterminant((dynamic)Data);
         }
 
+        /// <summary>
+        /// Check on equal two matrix
+        /// </summary>
+        /// <param name="matrix"> Second matrix for checking </param>
+        /// <returns> If matrix is simular, true, else - false </returns>
         public bool Equals(BaseSquareMatrix<T> matrix)
         {
             if (Order != matrix.Order)
@@ -140,25 +179,63 @@ namespace Task1.Logic
             return true;
         }
 
+        /// <summary>
+        /// Check on equal two matrix
+        /// </summary>
+        /// <param name="matrix"> Second matrix for checking </param>
+        /// <returns> If matrix is simular, true, else - false </returns>
         public override bool Equals(object obj)
         {
             var matrix = obj as BaseSquareMatrix<T>;
 
             return this.Equals(matrix);
         }
+        #endregion
 
-        public override int GetHashCode()
-        {
-            var hashCode = 368104177;
-            hashCode = (hashCode * -1521134295) + EqualityComparer<T[,]>.Default.GetHashCode(Data);
-            hashCode = (hashCode * -1521134295) + EqualityComparer<IComparer<T>>.Default.GetHashCode(Comparer);
-            hashCode = (hashCode * -1521134295) + Order.GetHashCode();
-            return hashCode;
-        }
+        #region Protected methods and properties
+        /// <summary>
+        /// Container for values of matrix
+        /// </summary>
+        protected T[,] Data { get; set; }
 
+        /// <summary>
+        /// Rules for comparing
+        /// </summary>
+        protected IComparer<T> Comparer { get; set; }
+
+        /// <summary>
+        /// Inform listeners about changing of element
+        /// </summary>
+        /// <param name="sender"> Creator of event </param>
+        /// <param name="eventArgs"> Detail information about event </param>
         protected virtual void OnElementValueChange(object sender, ElementValueArg<T> eventArgs)
         {
             ElementValueChanged?.Invoke(this, eventArgs);
+        }
+        #endregion
+
+        #region Private methods
+        private void CheckOnValid(T[] array, int startRowIndex, int startColumnIndex, int count)
+        {
+            if (array == null)
+            {
+                throw new ArgumentException($"The {nameof(array)} can't be null!");
+            }
+
+            if (startRowIndex < 0 || startRowIndex >= Order)
+            {
+                throw new ArgumentException($"The {nameof(startRowIndex)} can't be less than 0 or more than order!");
+            }
+
+            if (startColumnIndex < 0 || startColumnIndex >= Order)
+            {
+                throw new ArgumentException($"The {nameof(startColumnIndex)} can't be less than 0 or more than order!");
+            }
+
+            if (count <= 0 /*|| count > Data.Length - (startRowIndex + 1) * Order - startColunmIndex - 1*/)
+            {
+                throw new ArgumentException($"The {nameof(count)} is out of range!");
+            }
         }
 
         private dynamic FindDaterminant(dynamic[,] matrix)
@@ -194,5 +271,6 @@ namespace Task1.Logic
                 }
             }
         }
+        #endregion
     }
 }
