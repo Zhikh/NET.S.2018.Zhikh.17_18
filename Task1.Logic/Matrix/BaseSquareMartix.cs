@@ -39,6 +39,17 @@ namespace Task1.Logic
             }
         }
 
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < Order; i++)
+            {
+                for (int j = 0; j < Order; j++)
+                {
+                    yield return this[i, j];
+                }
+            }
+        }
+
         public bool IsSymmetric()
         {
             for (int i = 0; i < Order; i++)

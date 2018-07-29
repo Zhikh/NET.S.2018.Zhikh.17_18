@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Task1.Logic
+﻿namespace Task1.Logic
 {
     public sealed class SymmetricMatrix<T> : BaseSquareMatrix<T>
     {
@@ -30,7 +24,5 @@ namespace Task1.Logic
                 }
             }
         }
-
-
     }
 }
