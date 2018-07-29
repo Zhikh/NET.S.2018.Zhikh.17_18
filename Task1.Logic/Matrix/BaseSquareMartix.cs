@@ -24,6 +24,8 @@ namespace Task1.Logic
 
         public int Order { get; }
 
+        public int Lenght => Data.Length;
+
         protected T[,] Data { get; set; }
 
         protected IComparer<T> Comparer { get; set; }
@@ -38,6 +40,33 @@ namespace Task1.Logic
             protected set
             {
                 Data[indexRow, indexColumn] = value;
+            }
+        }
+
+        public void CopyTo(T[] array, int startRowIndex, int startColunmIndex, int count)
+        {
+            if (startRowIndex < 0 || startRowIndex >= Order)
+            {
+                throw new ArgumentException($"The {nameof(startRowIndex)} can't be less than 0 or more than order!");
+            }
+
+            if (startColunmIndex < 0 || startColunmIndex >= Order)
+            {
+                throw new ArgumentException($"The {nameof(startColunmIndex)} can't be less than 0 or more than order!");
+            }
+
+            if (count <= 0 /*|| count > Data.Length - (startRowIndex + 1) * Order - startColunmIndex - 1*/)
+            {
+                throw new ArgumentException($"The {nameof(count)} is out of range!");
+            }
+            
+            int writeValues = 0;
+            for (int i = startRowIndex; writeValues != count && i < Order; i++)
+            {
+                for (int j = startColunmIndex; writeValues != count && j < Order; j++)
+                {
+                    array[writeValues++] = this[i, j];
+                }
             }
         }
 
