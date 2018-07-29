@@ -5,9 +5,6 @@ Edits for previously tasks and tasks for day 17-18
 #### Task2 ([Queue](https://github.com/Zhikh/NET.S.2018.Zhikh.15/blob/master/Task2/Queue.cs))
 - GetEnumerator - fix return value
 - Implement cycle buffer for array
-### Day 14
-#### Task3 (IO streams)
-- Total refactor
 ### Day 9
 #### Task2 (Account)
 - Change project structure
