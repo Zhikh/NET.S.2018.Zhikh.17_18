@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Task1.Logic
 {
-    public class SymmetricMatrix<T> : Matrix<T>
+    public sealed class SymmetricMatrix<T> : BaseSquareMatrix<T>
     {
-
         public SymmetricMatrix(int order) : base(order)
         {
            
@@ -31,5 +30,7 @@ namespace Task1.Logic
                 }
             }
         }
+
+
     }
 }

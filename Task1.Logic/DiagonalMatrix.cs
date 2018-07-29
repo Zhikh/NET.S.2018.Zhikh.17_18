@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Task1.Logic
 {
-    public sealed class DiagonalMatrix<T> : Matrix<T>
+    public sealed class DiagonalMatrix<T> : BaseSquareMatrix<T>
     {
         public DiagonalMatrix(int order, IComparer<T> comparer = null) : base(order, comparer)
         {
         }
 
-        public T this[int indexRow, int indexColumn]
+        public override T this[int indexRow, int indexColumn]
         {
             get
             {
@@ -21,7 +21,11 @@ namespace Task1.Logic
 
             set
             {
-                
+                if (indexColumn != indexRow)
+                {
+                    throw new ArgumentException("Indexes must be equal!");
+                }
+
                 if (indexRow == indexColumn)
                 {
                     _container[indexColumn, indexRow] = value;
