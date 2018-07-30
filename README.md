@@ -1,6 +1,14 @@
 # NET.S.2018.Zhikh.17_18
 Edits for previously tasks and tasks for day 17-18
 ## Edits
+### Day 17_18
+#### Task1 ([Matrix](https://github.com/Zhikh/NET.S.2018.Zhikh.17_18/tree/master/Task1.Logic))
+- Change checking on existing default comparer fot type T
+- Change type of array for saving matrix
+- Add saving indexes in event arguments
+- Add get and set abstract methods for indexator
+- Add customer exception
+- Add additional methods for adding various matrixes
 ### Day 15
 #### Task2 ([Queue](https://github.com/Zhikh/NET.S.2018.Zhikh.15/blob/master/Task2/Queue.cs))
 - GetEnumerator - fix return value
