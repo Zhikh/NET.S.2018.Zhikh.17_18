@@ -4,19 +4,58 @@ namespace Task1.Logic
 {
     public sealed class MatrixSumVisitor<T> : MatrixVisitor<T>
     {
-        /// <summary>
-        /// Result of sum operation for matrix
-        /// </summary>
-        public T[,] Sum { get; private set; }
+        protected override SymmetricMatrix<T> Add(SymmetricMatrix<T> left, SymmetricMatrix<T> right)
+        {
+            ValidateParams(left, right);
 
-        /// <summary>
-        /// Calculate sum
-        /// </summary>
-        /// <param name="left"> Matrix </param>
-        /// <param name="right"> Matrix </param>
-        /// <exception cref="ArgumentException"> If matrixes have dufferent order </exception>
-        /// <exception cref="ArgumentNullException"> If one of matrix is null </exception>
-        protected override void Visit(BaseSquareMatrix<T> left, BaseSquareMatrix<T> right)
+            var result = new SymmetricMatrix<T>(left.Order);
+            AddByEachElement(left, right, result);
+
+            return result;
+        }
+
+        protected override DiagonalMatrix<T> Add(DiagonalMatrix<T> left, DiagonalMatrix<T> right)
+        {
+            ValidateParams(left, right);
+
+            var result = new DiagonalMatrix<T>(left.Order);
+            AddByEachElement(left, right, result);
+
+            return result;
+        }
+
+        protected override SquareMatrix<T> Add(SquareMatrix<T> left, BaseSquareMatrix<T> right)
+        {
+            ValidateParams(left, right);
+
+            var result = new SquareMatrix<T>(left.Order);
+            AddByEachElement(left, right, result);
+
+            return result;
+        }
+
+        protected override SquareMatrix<T> Add(BaseSquareMatrix<T> left, SquareMatrix<T> right)
+        {
+            return Add(right, left);
+        }
+
+        protected override SymmetricMatrix<T> Add(SymmetricMatrix<T> left, DiagonalMatrix<T> right)
+        {
+            ValidateParams(left, right);
+
+            var result = new SymmetricMatrix<T>(left.Order);
+            AddByEachElement(left, right, result);
+
+            return result;
+        }
+
+        protected override SymmetricMatrix<T> Add(DiagonalMatrix<T> left, SymmetricMatrix<T> right)
+        {
+            return Add(right, left);
+        }
+
+        #region Additional methods
+        private static void ValidateParams(BaseSquareMatrix<T> left, BaseSquareMatrix<T> right)
         {
             if (left == null || right == null)
             {
@@ -27,17 +66,19 @@ namespace Task1.Logic
             {
                 throw new ArgumentException("Order of matrix should be equal!");
             }
+        }
 
+        private static void AddByEachElement(BaseSquareMatrix<T> left, BaseSquareMatrix<T> right, BaseSquareMatrix<T> result)
+        {
             int n = left.Order;
-            Sum = new T[n, n];
-
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
-                    Sum[i, j] = (dynamic)left[i, j] + right[i, j];
+                    result[i, j] = (dynamic)left[i, j] + right[i, j];
                 }
             }
         }
+        #endregion
     }
 }

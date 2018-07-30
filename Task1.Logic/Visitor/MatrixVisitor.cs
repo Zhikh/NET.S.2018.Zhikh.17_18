@@ -7,14 +7,48 @@
         /// </summary>
         /// <param name="left"> Matrix </param>
         /// <param name="right"> Matrix </param>
-        public void DynamicVisit(BaseSquareMatrix<T> left, BaseSquareMatrix<T> right)
-            => Visit((dynamic)left, (dynamic)right);
+        public BaseSquareMatrix<T> DynamicAdd(BaseSquareMatrix<T> left, BaseSquareMatrix<T> right)
+            => Add((dynamic)left, (dynamic)right);
+
+        /// Extension methos for finding sum
+        /// </summary>
+        /// <param name="left"> Matrix </param>
+        /// <param name="right"> Matrix </param>
+        protected abstract SymmetricMatrix<T> Add(SymmetricMatrix<T> left, SymmetricMatrix<T> right);
 
         /// <summary>
         /// Extension methos for finding sum
         /// </summary>
         /// <param name="left"> Matrix </param>
         /// <param name="right"> Matrix </param>
-        protected abstract void Visit(BaseSquareMatrix<T> left, BaseSquareMatrix<T> right);
+        protected abstract DiagonalMatrix<T> Add(DiagonalMatrix<T> left, DiagonalMatrix<T> right);
+
+        /// <summary>
+        /// Extension methos for finding sum
+        /// </summary>
+        /// <param name="left"> Matrix </param>
+        /// <param name="right"> Matrix </param>
+        protected abstract SquareMatrix<T> Add(SquareMatrix<T> left, BaseSquareMatrix<T> right);
+
+        /// <summary>
+        /// Extension methos for finding sum
+        /// </summary>
+        /// <param name="left"> Matrix </param>
+        /// <param name="right"> Matrix </param>
+        protected abstract SquareMatrix<T> Add(BaseSquareMatrix<T> left, SquareMatrix<T> right);
+
+        /// <summary>
+        /// Extension methos for finding sum
+        /// </summary>
+        /// <param name="left"> Matrix </param>
+        /// <param name="right"> Matrix </param>
+        protected abstract SymmetricMatrix<T> Add(SymmetricMatrix<T> left, DiagonalMatrix<T> right);
+
+        /// <summary>
+        /// Extension methos for finding sum
+        /// </summary>
+        /// <param name="left"> Matrix </param>
+        /// <param name="right"> Matrix </param>
+        protected abstract SymmetricMatrix<T> Add(DiagonalMatrix<T> left, SymmetricMatrix<T> right);
     }
 }
