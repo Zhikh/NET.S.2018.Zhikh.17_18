@@ -43,19 +43,19 @@ namespace Task1.Logic
 
         internal override T GetValue(int indexRow, int indexColumn)
         {
-            return indexRow <= indexColumn ? Data[indexRow * (Order -1) + indexColumn] :
-                Data[indexColumn * (Order - 1) + indexRow];
+            return indexRow >= indexColumn ? Data[indexRow*(indexRow + 1) / 2 + indexColumn] :
+                Data[indexColumn * (indexColumn + 1) / 2 + indexRow];
         }
 
         internal override void SetValue(T value, int indexRow, int indexColumn)
         {
-            if (indexRow <= indexColumn)
+            if (indexRow >= indexColumn)
             {
-                Data[indexRow * (Order - 1) + indexColumn] = value;
+                Data[indexRow * (indexRow + 1) / 2 + indexColumn] = value;
             }
             else
             {
-                Data[indexColumn * (Order - 1) + indexRow] = value;
+                Data[indexColumn * (indexColumn + 1) / 2 + indexRow] = value;
             }
         }
 
