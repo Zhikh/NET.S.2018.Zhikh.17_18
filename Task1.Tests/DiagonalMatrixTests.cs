@@ -21,7 +21,7 @@ namespace Task1.Tests
            {
                var matrix = new DiagonalMatrix<int>(2);
 
-               matrix.Insert(0, 1);
+               matrix[1, 1] = 0;
            });
         #endregion
 
@@ -32,7 +32,7 @@ namespace Task1.Tests
         public int[] Indexator_SequenceOfElements_CorrectResult(int order, int[] values)
         {
             var matrix = new DiagonalMatrix<int>(order);
-            AddValues(order, values, matrix);
+            matrix.Copy(values);
 
             int[] actual = new int[matrix.Lenght];
             matrix.CopyTo(actual, 0, 0, matrix.Lenght);
@@ -41,13 +41,29 @@ namespace Task1.Tests
         }
         #endregion
 
-        #region Additional methods
-        private static void AddValues<T>(int order, T[] values, DiagonalMatrix<T> matrix)
+        #region Adding matrixes
+        [TestCase(4, new int[] { 1, 2, 3, 4 })]
+        [TestCase(16, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 })]
+        [TestCase(16, new int[] { 1, 2, 3, -120, 5, 6, 100, 8, 9, 10, int.MaxValue, 12, 13, int.MinValue, 15, 19 })]
+        public void Add_DiagonalMatrixAndDiagonalMatrix_CorrectResult(int order, int[] values)
         {
-            int k = 0;
-            for (int i = 0; i < order; i++)
+            var matrix = new DiagonalMatrix<int>(order);
+            matrix.Copy(values);
+
+
+            int[] reverseValues = new int[values.Length];
+            Array.Copy(values, reverseValues, values.Length);
+            Array.Reverse(reverseValues);
+
+            var reverseMatrix = new DiagonalMatrix<int>(order);
+            reverseMatrix.Copy(reverseValues);
+
+            var actual = matrix.Add(reverseMatrix);
+            int i = 0;
+            foreach (var element in actual)
             {
-                matrix.Insert(values[i], i);
+                Assert.AreEqual(values[i] + reverseValues[i], element);
+                i++;
             }
         }
         #endregion

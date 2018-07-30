@@ -22,26 +22,12 @@ namespace Task1.Tests
         public void Indexator_SymmetricSequenceOfElements_CorrectResult(int order, int[] values)
         {
             var matrix = new SymmetricMatrix<int>(order);
-            AddValues(order, values, matrix);
+            matrix.Copy(values);
 
             int i = 0;
             foreach (var element in matrix)
             {
                 Assert.AreEqual(values[i++], element);
-            }
-        }
-        #endregion
-
-        #region Additional methods
-        private static void AddValues<T>(int order, T[] values, SymmetricMatrix<T> matrix)
-        {
-            int k = 0;
-            for (int i = 0; i < order; i++)
-            {
-                for (int j = 0; j < order; j++)
-                {
-                    matrix.Insert(values[k++], i, j);
-                }
             }
         }
         #endregion
