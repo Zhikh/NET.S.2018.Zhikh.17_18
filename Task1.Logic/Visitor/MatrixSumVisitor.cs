@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.CSharp.RuntimeBinder;
+using System;
+using Task1.Logic.Exceptions;
 
 namespace Task1.Logic
 {
@@ -59,24 +61,31 @@ namespace Task1.Logic
         {
             if (left == null || right == null)
             {
-                throw new ArgumentNullException("Matrix can't be null!");
+                throw new InvalidMatrixOperationException("Matrix can't be null!");
             }
 
             if (left.Order != right.Order)
             {
-                throw new ArgumentException("Order of matrix should be equal!");
+                throw new InvalidMatrixOperationException("Order of matrix should be equal!");
             }
         }
 
         private static void AddByEachElement(BaseSquareMatrix<T> left, BaseSquareMatrix<T> right, BaseSquareMatrix<T> result)
         {
-            int n = left.Order;
-            for (int i = 0; i < n; i++)
+            try
             {
-                for (int j = 0; j < n; j++)
+                int n = left.Order;
+                for (int i = 0; i < n; i++)
                 {
-                    result[i, j] = (dynamic)left[i, j] + right[i, j];
+                    for (int j = 0; j < n; j++)
+                    {
+                        result[i, j] = (dynamic)left[i, j] + right[i, j];
+                    }
                 }
+            }
+            catch(RuntimeBinderException ex)
+            {
+                throw new NotSupportedException(nameof(T), ex);
             }
         }
         #endregion
