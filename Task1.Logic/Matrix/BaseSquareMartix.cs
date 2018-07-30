@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Task1.Logic
 {
-    public abstract class BaseSquareMatrix<T>
+    public abstract class BaseSquareMatrix<T> : IEnumerable<T>
     {
         #region public API
         /// <summary>
@@ -65,7 +66,7 @@ namespace Task1.Logic
             {
                 ValidateIndexes(indexRow, indexColumn);
 
-                var elementArg = new ElementValueArg<T>(this[indexRow, indexColumn], value);
+                var elementArg = new ElementValueArg<T>(this[indexRow, indexColumn], value, indexRow, indexColumn);
                 OnElementValueChange(this, elementArg);
 
                 SetValue(value, indexRow, indexColumn);
@@ -281,6 +282,11 @@ namespace Task1.Logic
                     minor[i - 1, j - 1] = this[i, j];
                 }
             }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
         #endregion
     }
