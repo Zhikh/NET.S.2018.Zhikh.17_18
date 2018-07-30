@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Task1.Logic
 {
@@ -13,6 +14,15 @@ namespace Task1.Logic
         /// <exception cref="ArgumentNullException"> If type T hasn't comparer </exception>
         public SymmetricMatrix(int order, IComparer<T> comparer = null) : base(order, comparer)
         {
+            int size = 0;
+            int temp = order;
+
+            while(temp > 0)
+            {
+                size += temp--;
+            }
+
+            Data = new T[size];
         }
         
         /// <summary>
@@ -21,13 +31,40 @@ namespace Task1.Logic
         /// <param name="value"> Value for inserting </param>
         /// <param name="rowIndex"> Row index </param>
         /// <param name="columnIndex"> Column index </param>
-        public void Insert(T value, int rowIndex, int columnIndex)
-        {
-            base.Data[rowIndex, columnIndex] = value;
+        //public void Insert(T value, int rowIndex, int columnIndex)
+        //{
+        //    base.Data[rowIndex, columnIndex] = value;
 
-            if (rowIndex != columnIndex)
+        //    if (rowIndex != columnIndex)
+        //    {
+        //        base.Data[columnIndex, rowIndex] = value;
+        //    }
+        //}
+
+        internal override T GetValue(int indexRow, int indexColumn)
+        {
+            return indexRow <= indexColumn ? Data[indexRow * (Order -1) + indexColumn] :
+                Data[indexColumn * (Order - 1) + indexRow];
+        }
+
+        internal override void SetValue(T value, int indexRow, int indexColumn)
+        {
+            if (indexRow <= indexColumn)
             {
-                base.Data[columnIndex, rowIndex] = value;
+                Data[indexRow * (Order - 1) + indexColumn] = value;
+            }
+            else
+            {
+                Data[indexColumn * (Order - 1) + indexRow] = value;
+            }
+        }
+
+        internal override void ValidateIndexes(int indexRow, int indexColumn)
+        {
+            if (indexRow < 0 || indexRow > Order ||
+                indexColumn < 0 || indexColumn > Order)
+            {
+                throw new ArgumentException("The index exited from range of matrix!");
             }
         }
     }

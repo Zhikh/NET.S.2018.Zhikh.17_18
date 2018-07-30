@@ -14,6 +14,7 @@ namespace Task1.Logic
         /// <exception cref="ArgumentNullException"> If type T hasn't comparer </exception>
         public DiagonalMatrix(int order, IComparer<T> comparer = null) : base(order, comparer)
         {
+            Data = new T[order];
         }
 
         /// <summary>
@@ -22,14 +23,43 @@ namespace Task1.Logic
         /// <param name="value"> Value for inserting </param>
         /// <param name="rowIndex"> Row index </param>
         /// <param name="columnIndex"> Column index </param>
-        public void Insert(T value, int index)
+        //public void Insert(T value, int index)
+        //{
+        //    if (Comparer.Compare(value, default(T)) == 0)
+        //    {
+        //        throw new ArgumentException($"The {nameof(value)} can't be null!");
+        //    }
+
+        //    this[index, index] = value;
+        //}
+
+        internal override T GetValue(int indexRow, int indexColumn)
         {
+            return indexRow == indexColumn ? Data[indexRow] : default(T);
+        }
+
+        internal override void SetValue(T value, int indexRow, int indexColumn)
+        {
+            if (indexRow != indexColumn)
+            {
+                throw new ArgumentException("The index exited from range of matrix!");
+            }
+
             if (Comparer.Compare(value, default(T)) == 0)
             {
                 throw new ArgumentException($"The {nameof(value)} can't be null!");
             }
 
-            base.Data[index, index] = value;
+            Data[indexRow] = value;
+        }
+
+        internal override void ValidateIndexes(int indexRow, int indexColumn)
+        {
+            if (indexRow < 0 || indexRow > Order ||
+                indexColumn < 0 || indexColumn > Order)
+            {
+                throw new ArgumentException("The index exited from range of matrix!");
+            }
         }
     }
 }

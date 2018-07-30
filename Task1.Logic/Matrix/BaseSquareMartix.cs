@@ -21,11 +21,14 @@ namespace Task1.Logic
             }
 
             Comparer = comparer ??
-                (Comparer<T>.Default as IComparer<T> ??
+                (typeof(IComparable<T>).IsAssignableFrom(typeof(T)) ||
+                typeof(IComparable).IsAssignableFrom(typeof(T)) ?
+                Comparer = Comparer<T>.Default :
                 throw new ArgumentNullException("Comparer's indefined for type of T!"));
 
-            Data = new T[order, order];
             Order = order;
+
+            Lenght = Order * Order;
         }
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace Task1.Logic
         /// <summary>
         /// Number of elements
         /// </summary>
-        public int Lenght => Data.Length;
+        public int Lenght { get; }
 
         /// <summary>
         /// Indexatot
@@ -53,17 +56,25 @@ namespace Task1.Logic
         {
             get
             {
-                return Data[indexRow, indexColumn];
+                ValidateIndexes(indexRow, indexColumn);
+
+                return GetValue(indexRow, indexColumn);
             }
 
-            protected set
+            set
             {
-                var elementArg = new ElementValueArg<T>(Data[indexRow, indexColumn], value);
+                ValidateIndexes(indexRow, indexColumn);
+
+                var elementArg = new ElementValueArg<T>(this[indexRow, indexColumn], value);
                 OnElementValueChange(this, elementArg);
 
-                Data[indexRow, indexColumn] = value;
+                SetValue(value, indexRow, indexColumn);
             }
         }
+
+        internal abstract void SetValue(T value, int indexRow, int indexColumn);
+        internal abstract T GetValue(int indexRow, int indexColumn);
+        internal abstract void ValidateIndexes(int indexRow, int indexColumn);
 
         /// <summary>
         /// Copy elements from matrix to sz-array
@@ -133,7 +144,7 @@ namespace Task1.Logic
 
             for (int i = 0; i < Order; i++)
             {
-                result += (dynamic)Data[i, i];
+                result += (dynamic)this[i, i];
             }
 
             return result;
@@ -196,7 +207,7 @@ namespace Task1.Logic
         /// <summary>
         /// Container for values of matrix
         /// </summary>
-        protected T[,] Data { get; set; }
+        protected T[] Data { get; set; }
 
         /// <summary>
         /// Rules for comparing

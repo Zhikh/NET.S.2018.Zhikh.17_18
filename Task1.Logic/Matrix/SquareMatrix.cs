@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Task1.Logic
 {
@@ -13,6 +14,7 @@ namespace Task1.Logic
         /// <exception cref="ArgumentNullException"> If type T hasn't comparer </exception>
         public SquareMatrix(int order, IComparer<T> comparer = null) : base(order, comparer)
         {
+            Data = new T[order * order];
         }
 
         /// <summary>
@@ -24,6 +26,25 @@ namespace Task1.Logic
         public void Insert(T value, int rowIndex, int columnIndex)
         {
             this[rowIndex, columnIndex] = value;
+        }
+
+        internal override T GetValue(int indexRow, int indexColumn)
+        {
+            return Data[indexRow + indexColumn * Order];
+        }
+
+        internal override void SetValue(T value, int indexRow, int indexColumn)
+        {
+            Data[indexRow + indexColumn * Order] = value;
+        }
+
+        internal override void ValidateIndexes(int indexRow, int indexColumn)
+        {
+            if (indexRow < 0 || indexRow > Order ||
+                indexColumn < 0 || indexColumn > Order)
+            {
+                throw new ArgumentException("The index exited from range of matrix!");
+            }
         }
     }
 }
