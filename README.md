@@ -9,6 +9,13 @@ Edits for previously tasks and tasks for day 17-18
 - Add get and set abstract methods for indexator
 - Add customer exception
 - Add additional methods for adding various matrixes
+### Day 16
+#### Task1 ([BinaryTree](https://github.com/Zhikh/NET.S.2018.Zhikh.16/tree/master/Task1/Task1.Logic))
+- Change access modificator for Node
+- Add IsEmpy method
+- BinarySearchTree<T> : IEnumerable<T>
+- Change way of checking of T has default comparer
+- Add version for tree
 ### Day 15
 #### Task2 ([Queue](https://github.com/Zhikh/NET.S.2018.Zhikh.15/blob/master/Task2/Queue.cs))
 - GetEnumerator - fix return value
