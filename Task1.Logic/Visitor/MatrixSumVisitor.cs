@@ -36,7 +36,7 @@ namespace Task1.Logic
 
         protected override SquareMatrix<T> Add(BaseSquareMatrix<T> left, SquareMatrix<T> right)
         {
-            return Add(right, left);
+            return this.Add(right, left);
         }
 
         protected override SymmetricMatrix<T> Add(SymmetricMatrix<T> left, DiagonalMatrix<T> right)
@@ -51,7 +51,7 @@ namespace Task1.Logic
 
         protected override SymmetricMatrix<T> Add(DiagonalMatrix<T> left, SymmetricMatrix<T> right)
         {
-            return Add(right, left);
+            return this.Add(right, left);
         }
 
         #region Additional methods

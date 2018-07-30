@@ -14,28 +14,12 @@ namespace Task1.Logic
         /// <exception cref="ArgumentNullException"> If type T hasn't comparer </exception>
         public DiagonalMatrix(int order, IComparer<T> comparer = null) : base(order, comparer)
         {
-            Data = new T[order];
+            base.Data = new T[order];
         }
-
-        /// <summary>
-        /// Add value to matrix (only diagonal elements)
-        /// </summary>
-        /// <param name="value"> Value for inserting </param>
-        /// <param name="rowIndex"> Row index </param>
-        /// <param name="columnIndex"> Column index </param>
-        //public void Insert(T value, int index)
-        //{
-        //    if (Comparer.Compare(value, default(T)) == 0)
-        //    {
-        //        throw new ArgumentException($"The {nameof(value)} can't be null!");
-        //    }
-
-        //    this[index, index] = value;
-        //}
-
+        
         internal override T GetValue(int indexRow, int indexColumn)
         {
-            return indexRow == indexColumn ? Data[indexRow] : default(T);
+            return indexRow == indexColumn ? base.Data[indexRow] : default(T);
         }
 
         internal override void SetValue(T value, int indexRow, int indexColumn)
@@ -50,7 +34,7 @@ namespace Task1.Logic
                 throw new ArgumentException($"The {nameof(value)} can't be null!");
             }
 
-            Data[indexRow] = value;
+            base.Data[indexRow] = value;
         }
 
         internal override void ValidateIndexes(int indexRow, int indexColumn)

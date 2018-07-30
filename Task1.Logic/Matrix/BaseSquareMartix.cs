@@ -46,6 +46,16 @@ namespace Task1.Logic
         /// Number of elements
         /// </summary>
         public int Lenght { get; }
+        
+        /// <summary>
+        /// Container for values of matrix
+        /// </summary>
+        protected T[] Data { get; set; }
+
+        /// <summary>
+        /// Rules for comparing
+        /// </summary>
+        protected IComparer<T> Comparer { get; set; }
 
         /// <summary>
         /// Indexatot
@@ -73,10 +83,6 @@ namespace Task1.Logic
             }
         }
 
-        internal abstract void SetValue(T value, int indexRow, int indexColumn);
-        internal abstract T GetValue(int indexRow, int indexColumn);
-        internal abstract void ValidateIndexes(int indexRow, int indexColumn);
-
         /// <summary>
         /// Copy elements from matrix to sz-array
         /// </summary>
@@ -85,7 +91,7 @@ namespace Task1.Logic
         /// <param name="startColumnIndex"> Row Column for start copying </param>
         /// <param name="count"> Number of elements </param>
         /// <exception cref="ArgumentException"> If startRowIndex, startColumnIndex, count are out if range </exception>
-        ///<exception cref="ArgumentNullException"> If array is null </exception>
+        /// <exception cref="ArgumentNullException"> If array is null </exception>
         public void CopyTo(T[] array, int startRowIndex, int startColumnIndex, int count)
         {
             CheckOnValid(array, startRowIndex, startColumnIndex, count);
@@ -202,19 +208,29 @@ namespace Task1.Logic
 
             return this.Equals(matrix);
         }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 687679755;
+
+            hashCode = (hashCode * -1521134295) + Order.GetHashCode();
+            hashCode = (hashCode * -1521134295) + Lenght.GetHashCode();
+            hashCode = (hashCode * -1521134295) + EqualityComparer<T[]>.Default.GetHashCode(Data);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<IComparer<T>>.Default.GetHashCode(Comparer);
+
+            return hashCode;
+        }
         #endregion
 
-        #region Protected methods and properties
-        /// <summary>
-        /// Container for values of matrix
-        /// </summary>
-        protected T[] Data { get; set; }
+        #region Abstract methods
+        internal abstract void SetValue(T value, int indexRow, int indexColumn);
 
-        /// <summary>
-        /// Rules for comparing
-        /// </summary>
-        protected IComparer<T> Comparer { get; set; }
+        internal abstract T GetValue(int indexRow, int indexColumn);
 
+        internal abstract void ValidateIndexes(int indexRow, int indexColumn);
+        #endregion
+
+        #region Protected methods
         /// <summary>
         /// Inform listeners about changing of element
         /// </summary>

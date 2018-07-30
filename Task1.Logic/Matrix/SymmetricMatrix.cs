@@ -17,45 +17,29 @@ namespace Task1.Logic
             int size = 0;
             int temp = order;
 
-            while(temp > 0)
+            while (temp > 0)
             {
                 size += temp--;
             }
 
-            Data = new T[size];
+            base.Data = new T[size];
         }
         
-        /// <summary>
-        /// Add value to matrix by symmetric way
-        /// </summary>
-        /// <param name="value"> Value for inserting </param>
-        /// <param name="rowIndex"> Row index </param>
-        /// <param name="columnIndex"> Column index </param>
-        //public void Insert(T value, int rowIndex, int columnIndex)
-        //{
-        //    base.Data[rowIndex, columnIndex] = value;
-
-        //    if (rowIndex != columnIndex)
-        //    {
-        //        base.Data[columnIndex, rowIndex] = value;
-        //    }
-        //}
-
         internal override T GetValue(int indexRow, int indexColumn)
         {
-            return indexRow >= indexColumn ? Data[indexRow*(indexRow + 1) / 2 + indexColumn] :
-                Data[indexColumn * (indexColumn + 1) / 2 + indexRow];
+            return indexRow >= indexColumn ? base.Data[indexRow * (indexRow + 1) / 2 + indexColumn] :
+                base.Data[indexColumn * (indexColumn + 1) / 2 + indexRow];
         }
 
         internal override void SetValue(T value, int indexRow, int indexColumn)
         {
             if (indexRow >= indexColumn)
             {
-                Data[indexRow * (indexRow + 1) / 2 + indexColumn] = value;
+                base.Data[indexRow * (indexRow + 1) / 2 + indexColumn] = value;
             }
             else
             {
-                Data[indexColumn * (indexColumn + 1) / 2 + indexRow] = value;
+                base.Data[indexColumn * (indexColumn + 1) / 2 + indexRow] = value;
             }
         }
 

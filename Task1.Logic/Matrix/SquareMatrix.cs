@@ -14,28 +14,17 @@ namespace Task1.Logic
         /// <exception cref="ArgumentNullException"> If type T hasn't comparer </exception>
         public SquareMatrix(int order, IComparer<T> comparer = null) : base(order, comparer)
         {
-            Data = new T[order * order];
+            base.Data = new T[order * order];
         }
-
-        /// <summary>
-        /// Add value to matrix
-        /// </summary>
-        /// <param name="value"> Value for inserting </param>
-        /// <param name="rowIndex"> Row index </param>
-        /// <param name="columnIndex"> Column index </param>
-        public void Insert(T value, int rowIndex, int columnIndex)
-        {
-            this[rowIndex, columnIndex] = value;
-        }
-
+        
         internal override T GetValue(int indexRow, int indexColumn)
         {
-            return Data[indexRow + indexColumn * Order];
+            return base.Data[indexRow + indexColumn * Order];
         }
 
         internal override void SetValue(T value, int indexRow, int indexColumn)
         {
-            Data[indexRow + indexColumn * Order] = value;
+            base.Data[indexRow + indexColumn * Order] = value;
         }
 
         internal override void ValidateIndexes(int indexRow, int indexColumn)
