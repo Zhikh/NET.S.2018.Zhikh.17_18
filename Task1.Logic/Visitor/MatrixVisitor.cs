@@ -8,7 +8,7 @@
         /// <param name="left"> Matrix </param>
         /// <param name="right"> Matrix </param>
         public BaseSquareMatrix<T> DynamicAdd(BaseSquareMatrix<T> left, BaseSquareMatrix<T> right)
-            => Add((dynamic)left, (dynamic)right);
+            => Add((dynamic)left, right);
 
         /// Extension methos for finding sum
         /// </summary>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Task1.Logic
 {
-    public class SquareMatrix<T> : BaseSquareMatrix<T>
+    public sealed class SquareMatrix<T> : BaseSquareMatrix<T>
     {
         /// <summary>
         /// Initialize properties
